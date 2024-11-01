@@ -17,3 +17,9 @@ void write() {
 void writeClose() {
     fclose(write);
 }
+
+void readInit() {}
+
+void read() {
+    
+}
