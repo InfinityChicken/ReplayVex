@@ -1,25 +1,40 @@
 #include "main.h"
-#include <cstdio>
+#include "globals.hpp"
+#include "magic.hpp"
+#include <iostream>
+#include <fstream>
 
-FILE* write = fopen("/usd/autonomous.txt", "w");
-FILE* read = fopen("/usd/autonomous.txt", "r");
+bool active = true;
 
-void writeInit() {}
+void init() {
+    if(!file) {
+        controller.set_text(0, 0, "failed to open");
+    }
+}
+
+void close() {
+    if(pros::E_CONTROLLER_DIGITAL_DOWN && active) {
+        file.close();
+        active = false;
+    }
+}
 
 void write() {
-    std::string dataLine = "";
-    dataLine.append(driveOne.get_voltage() + " ");
-    dataLine.append(driveTwo.get_voltage());
-    
-    fputs(dataLine, write);
+    if(active) {
+        std::string dataLine = "";
+        dataLine.append(driveOne.get_voltage() + " ");
+        dataLine.append(driveTwo.get_voltage() + " ");
+        dataLine.append("\n");
+        
+        file << dataLine << std::endl;
+    }
 }
-
-void writeClose() {
-    fclose(write);
-}
-
-void readInit() {}
 
 void read() {
-    
+    double voltages[2];
+    for (int i=0; i<2; i++) {
+        file >> voltages[i];
+    }
+    driveOne.move_voltage(voltages[0]);
+    driveTwo.move_voltage(voltages[1]);
 }
