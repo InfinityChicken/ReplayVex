@@ -7,9 +7,15 @@
 bool active = true;
 
 void init() {
+    //std::ofstream file("/usd/autonomous.txt");
+    file.open("/usd/autonomous.txt");
     if(!file) {
         controller.set_text(0, 0, "failed to open");
         active = false;
+    }
+    else{
+        controller.set_text(0, 0, "opened");
+        active = true;
     }
 }
 
@@ -30,7 +36,7 @@ void write() {
     }
 }
 
-void read() {
+/*void read() {
     if(active) {
         double voltages[2];
         for (int i=0; i<2; i++) {
@@ -39,4 +45,4 @@ void read() {
         driveOne.move_voltage(voltages[0]);
         driveTwo.move_voltage(voltages[1]);
     }
-}
+}*/

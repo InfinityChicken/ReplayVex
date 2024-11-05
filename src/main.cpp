@@ -73,8 +73,11 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
+	std::ofstream test("test.txt");
+	test<<"test";
+	
 	while (true) {
 		write();
-		close();
+		//close();
 	}
 }
