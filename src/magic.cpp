@@ -8,10 +8,10 @@
 bool active = true;
 // int count = 1;
 
-void init() {
-    //std::ofstream file("/usd/autonomous.txt");
-    file.open("/usd/autonomous.txt");
-    if(!file) {
+void initO() {
+    fileO.open("/usd/autonomous.txt");
+
+    if(!fileO) {
         controller.set_text(0, 0, "failed to open");
         active = false;
     }
@@ -21,54 +21,89 @@ void init() {
     }
 }
 
-void close() {
-    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) && active) {
-        file.flush();
-        controller.set_text(0, 0, "WAIT FIVE SECONDS!!!");
-        pros::delay (5000);
-        file.close();
+void initI() {
+    fileI.open("/usd/autonomous.txt");
+
+    if(!fileI) {
+        controller.set_text(0, 0, "failed to open");
         active = false;
-        controller.set_text(0, 0, "file closed                     ");
+    }
+    else{
+        controller.set_text(0, 0, "opened");
+        active = true;
+    }
+}
+
+void closeO() {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && active) {
+        fileO.flush();
+        controller.set_text(0, 0, "WAIT FIVE SECONDS!!!");
+        pros::delay(5000);
+        fileO.close();
+        active = false;
+        controller.set_text(0, 0, "file closed                           ");
+    }
+}
+
+void closeI() {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A) && active) {
+        fileI.close();
+        active = false;
+        controller.set_text(0, 0, "file closed                           ");
     }
 }
 
 void write() {
     if(active) {
         std::string dataLine = "";
-        dataLine.append(std::to_string(driveOne.get_voltage()) + "\n");
-        // dataLine.append(driveTwo.get_voltage() + "\n");
+        dataLine.append(std::to_string(leftMotors.get_voltage()) + " ");
+        dataLine.append(std::to_string(rightMotors.get_voltage()) + "\n");
         
-        file << dataLine; //<< std::endl;
+        fileO << dataLine; //<< std::endl;
         
-        file.flush();
+        fileO.flush();
     }
 }
 
-void smallTest() {
-    file << "PLEASE FOR THE LOVE OF GOD";
-    controller.set_text(0, 0, "hooray");
-    pros::delay(3000);
-    file.flush();
-    controller.set_text(0, 0, "flushed");
-    pros::delay(3000);
-    file.close();
-    controller.set_text(0, 0, "file closed");
-    pros::delay(3000);
-}
-
-void testSquared() {
-    std::string dataLine = "";
-    dataLine.append(std::to_string(driveOne.get_voltage()) + "\n");
-
-}
-
-/*void read() {
+void read() {
     if(active) {
-        double voltages[2];
+        int voltages[2];
+        
         for (int i=0; i<2; i++) {
-            file >> voltages[i];
+            fileI >> voltages[i];
         }
-        driveOne.move_voltage(voltages[0]);
-        driveTwo.move_voltage(voltages[1]);
+
+        leftMotors.move_voltage(voltages[0]);
+        rightMotors.move_voltage(voltages[1]);
+
+        // driveTwo.move_voltage(voltages[1]);
     }
-}*/
+    
+    /* if(active) {
+        int voltage;
+        fileI >> voltage;
+        
+        // double voltages[2];
+        // for (int i=0; i<2; i++) {
+        //     file >> voltages[i];
+        // }
+
+        driveOne.move_voltage(voltage);
+
+        // driveTwo.move_voltage(voltages[1]);
+    } */
+}
+
+void runMotors() {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+		driveOne.move_voltage(12000);
+    } else {
+		driveOne.move_voltage(0);
+    }
+
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT)) {
+        driveTwo.move_voltage(12000);
+    } else {
+        driveTwo.move_voltage(0);
+    }
+}
