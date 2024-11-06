@@ -1,5 +1,7 @@
 #include "main.h"
 #include "magic.hpp"
+#include "globals.hpp"
+#include <string>
 
 /**
  * A callback function for LLEMU's center button.
@@ -73,11 +75,20 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	std::ofstream test("test.txt");
-	test<<"test";
-	
 	while (true) {
+		if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
+			driveOne.move_voltage(12000);
+		} else {
+			driveOne.move_voltage(0);
+		}
+
+		// std::string dataLine = "";
+    	// dataLine.append(std::to_string(driveOne.get_voltage()));
+
+		// controller.set_text(0, 0, dataLine);
+
+		close();
 		write();
-		//close();
+		pros::delay(100);
 	}
 }

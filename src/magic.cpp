@@ -3,8 +3,10 @@
 #include "magic.hpp"
 #include <iostream>
 #include <fstream>
+#include <string>
 
 bool active = true;
+// int count = 1;
 
 void init() {
     //std::ofstream file("/usd/autonomous.txt");
@@ -20,20 +22,44 @@ void init() {
 }
 
 void close() {
-    if(pros::E_CONTROLLER_DIGITAL_DOWN && active) {
+    if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) && active) {
+        file.flush();
+        controller.set_text(0, 0, "WAIT FIVE SECONDS!!!");
+        pros::delay (5000);
         file.close();
         active = false;
+        controller.set_text(0, 0, "file closed                     ");
     }
 }
 
 void write() {
     if(active) {
         std::string dataLine = "";
-        dataLine.append(driveOne.get_voltage() + " ");
-        dataLine.append(driveTwo.get_voltage() + "\n");
+        dataLine.append(std::to_string(driveOne.get_voltage()) + "\n");
+        // dataLine.append(driveTwo.get_voltage() + "\n");
         
         file << dataLine; //<< std::endl;
+        
+        file.flush();
     }
+}
+
+void smallTest() {
+    file << "PLEASE FOR THE LOVE OF GOD";
+    controller.set_text(0, 0, "hooray");
+    pros::delay(3000);
+    file.flush();
+    controller.set_text(0, 0, "flushed");
+    pros::delay(3000);
+    file.close();
+    controller.set_text(0, 0, "file closed");
+    pros::delay(3000);
+}
+
+void testSquared() {
+    std::string dataLine = "";
+    dataLine.append(std::to_string(driveOne.get_voltage()) + "\n");
+
 }
 
 /*void read() {
