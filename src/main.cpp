@@ -30,18 +30,11 @@ void autonomous() {}
 
 void opcontrol() {
 	while(true) {
-		// runMotors();
-		// closeO();
-		// write();
-		// int leftY = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-        // int rightX = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X);
-		// int left = leftY + rightX;
-		// int right = leftY - rightX;
-		// leftMotors.move_velocity(left);
-		// rightMotors.move_velocity(right);
+		closeO();
+		write();
 
 		closeI();
 		read();
-		pros::delay(100);
+		pros::delay(10);
 	}
 }

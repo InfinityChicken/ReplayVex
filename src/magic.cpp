@@ -65,6 +65,18 @@ void write() {
     }
 }
 
+void writeControllerData() {
+    if(active) {
+        std::string dataLine = "";
+        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
+        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)));
+
+        file0 << dataLine;
+        
+        fileO.flush();
+    }
+}
+
 void read() {
     if(active) {
         int voltages[2];
@@ -94,6 +106,19 @@ void read() {
     } */
 }
 
+void readControllerData() {
+    if(active) {
+        double leftVel;
+        double rightVel;
+
+        file >> leftVel;
+        file >> rightVel;
+
+        leftMotors.move_velocity(leftVel);
+        rightMotors.move_velocity(rightVel);
+    }
+}
+
 void runMotors() {
     if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT)) {
 		driveOne.move_voltage(12000);
@@ -106,4 +131,9 @@ void runMotors() {
     } else {
         driveTwo.move_voltage(0);
     }
+}
+
+void drive() {
+    leftMotors.move_velocity(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    rightMotors.move_velocity(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
 }
