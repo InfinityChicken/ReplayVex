@@ -68,10 +68,10 @@ void write() {
 void writeControllerData() {
     if(active) {
         std::string dataLine = "";
-        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
-        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)));
+        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)) + " ");
+        dataLine.append(std::to_string(controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X)) + "\n");
 
-        file0 << dataLine;
+        fileO << dataLine;
         
         fileO.flush();
     }
@@ -108,14 +108,14 @@ void read() {
 
 void readControllerData() {
     if(active) {
-        double leftVel;
-        double rightVel;
+        double leftInput;
+        double rightInput;
 
-        file >> leftVel;
-        file >> rightVel;
+        fileI >> leftInput;
+        fileI >> rightInput;
 
-        leftMotors.move_velocity(leftVel);
-        rightMotors.move_velocity(rightVel);
+        leftMotors.move_velocity((leftInput + rightInput) * 200);
+        rightMotors.move_velocity((leftInput - rightInput) * 200);
     }
 }
 
@@ -134,6 +134,10 @@ void runMotors() {
 }
 
 void drive() {
-    leftMotors.move_velocity(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
-    rightMotors.move_velocity(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X));
+    leftMotors.move_velocity(
+        (controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) + controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))
+        * 200);
+    rightMotors.move_velocity(
+        (controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) - controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X))
+        * 200);
 }

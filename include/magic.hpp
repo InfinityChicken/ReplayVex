@@ -24,3 +24,5 @@ void closeO();
 void closeI();
 void runMotors();
 void drive();
+void writeControllerData();
+void readControllerData();
