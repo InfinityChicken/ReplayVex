@@ -7,8 +7,8 @@
 inline pros::Motor driveOne(9, pros::MotorGearset::green);
 inline pros::Motor driveTwo(10, pros::MotorGearset::green);
 
-inline pros::MotorGroup leftMotors({-3, -2, -16}, pros::MotorGearset::blue);
-inline pros::MotorGroup rightMotors({19, 20, 18}, pros::MotorGearset::blue);
+extern pros::MotorGroup leftMotors;
+extern pros::MotorGroup rightMotors;
 
 inline std::ofstream fileO;
 inline std::ifstream fileI;

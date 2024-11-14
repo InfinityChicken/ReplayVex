@@ -3,8 +3,8 @@
 #include "globals.hpp"
 #include <string>
 
-pros::MotorGroup leftMotors({-11, -12}, pros::MotorGearset::green);
-pros::MotorGroup rightMotors({9, 4}, pros::MotorGearset::green);
+pros::MotorGroup leftMotors({11, 12}, pros::MotorGearset::green);
+pros::MotorGroup rightMotors({-9, -4}, pros::MotorGearset::green);
 
 void on_center_button() {
 	static bool pressed = false;
@@ -18,24 +18,29 @@ void on_center_button() {
 
 void initialize() {
 	pros::lcd::initialize();
-	initO();
-	// initI();
+	//initO();
+	initI();
 }
 
 void disabled() {}
 
 void competition_initialize() {}
 
-void autonomous() {}
+void autonomous() {
+	// while(true) {
+	// 	readControllerData();
+	// }
+
+}
 
 void opcontrol() {
 	while(true) {
-		closeO();
-		writeControllerData();
-		drive();
+		//closeO();
+		//writeControllerData();
+		//drive();
 
-		// closeI();
-		// readControllerData();
+		closeI();
+		readControllerData();
 		pros::delay(10);
 	}
 }
