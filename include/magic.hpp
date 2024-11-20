@@ -22,7 +22,11 @@ void initO();
 void initI();
 void closeO();
 void closeI();
+
 void runMotors();
-void drive();
+void driveBasic();
 void writeControllerData();
 void readControllerData();
+
+void writePose();
+void readPose();

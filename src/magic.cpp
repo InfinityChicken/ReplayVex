@@ -133,7 +133,7 @@ void runMotors() {
     }
 }
 
-void drive() {
+void driveBasic() {
     leftMotors.move_velocity(
         (controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y)));
     rightMotors.move_velocity(
@@ -151,4 +151,17 @@ void writeSubsystems() {
         
         fileO.flush();
     }
+
+}
+
+void writePose() {
+   lemlib::Pose pose = chassis.getPose();
+
+   dataLine.append(std::to_string(pose.x) + ", ");
+   dataLine.append(std::to_string(pose.y) + ", ");
+   dataLine.append(std::to_string(pose.theta) + "\n");
+}
+
+void readPose() {
+    
 }
